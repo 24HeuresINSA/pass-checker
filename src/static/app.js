@@ -28,16 +28,9 @@ class App extends React.Component {
     this.props.dispatch(push('/pass'));
   };
 
-  goToProtected = () => {
-    this.props.dispatch(push('/protected'));
-  };
-
   render() {
     const homeClass = classNames({
       active: this.props.pathName === '/'
-    });
-    const protectedClass = classNames({
-      active: this.props.pathName === '/protected'
     });
     const passClass = classNames({
       active: this.props.pathName === '/pass'
