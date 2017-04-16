@@ -8,8 +8,10 @@ class PassView extends React.Component {
 
   static defaultProps = {
     data: [],
+    accessPoints: [],
     searchText: '',
-    isFetching: false
+    isFetching: false,
+    isFetchingAccessPoints: false
   };
 
   styles = {
@@ -36,6 +38,21 @@ class PassView extends React.Component {
   componentWillMount() {
     const token = this.props.token;
     this.props.actions.passFetch(token);
+    this.props.actions.accessPointFetch(token);
+  }
+
+  isAccessPointAllowed(accessPoint, allowedAccessPoints) {
+    let allowed = false;
+    for (let i = 0; i < allowedAccessPoints.length; i++) {
+      if (allowedAccessPoints[i].id == accessPoint.id) {
+        allowed = true;
+      }
+    }
+    return allowed;
+  }
+
+  accessPointClassName(accessPoint, allowedAccessPoints) {
+    return this.isAccessPointAllowed(accessPoint, allowedAccessPoints) ? 'success' : 'danger';
   }
 
   render() {
@@ -105,6 +122,48 @@ class PassView extends React.Component {
                       <div className="row">
                         <div className="col-sm-12">
                           <h5>Points d'accès</h5>
+                          <table className="table table-striped table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                {this.props.accessPoints.map(item =>
+                                  <th
+                                    key={item.id}
+                                    className="text-center"
+                                  >
+                                    <i
+                                      className={this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points)
+                                        ? 'fa fa-check'
+                                        : 'fa fa-times'
+                                      }
+                                    />
+                                    {item.name}
+                                  </th>
+                                )}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                {this.props.accessPoints.map(item =>
+                                  <td key={item.id} className="text-center">
+                                      {this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points) ?
+                                        <button className="btn btn-sm btn-success">Passage</button>
+                                        :
+                                        <div className="btn-group">
+                                          <button type="button" className="btn btn-sm btn-danger">Forçage</button>
+                                          <button type="button" className="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span className="caret"/>
+                                            <span className="sr-only">Toggle Dropdown</span>
+                                          </button>
+                                          <ul className="dropdown-menu">
+                                            <li><a href="#">Autoriser le passage</a></li>
+                                          </ul>
+                                        </div>
+                                      }
+                                  </td>
+                                )}
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
@@ -131,7 +190,9 @@ const mapStateToProps = (state) => {
   return {
     searchText: state.pass.searchText,
     data: state.pass.data,
+    accessPoints: state.pass.accessPoints,
     isFetching: state.pass.isFetching,
+    isFetchingAccessPoints: state.pass.isFetchingAccessPoints,
     selectedPass: state.pass.selectedPass
   };
 };

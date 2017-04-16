@@ -1,9 +1,15 @@
 import {createReducer} from "../utils/index";
-import {PASS_FETCH_REQUEST, PASS_RECEIVE, PASS_SEARCH_INPUT_CHANGE, PASS_SEARCH_INPUT_SELECT} from "../constants/index";
+import {
+  ACCESS_POINT_FETCH_REQUEST,
+  ACCESS_POINT_RECEIVE, PASS_FETCH_REQUEST, PASS_RECEIVE, PASS_SEARCH_INPUT_CHANGE,
+  PASS_SEARCH_INPUT_SELECT
+} from "../constants/index";
 
 const initialState = {
   searchText: "",
   isFetching: false,
+  isFetchingAccessPoints: false,
+  accessPoints: [],
   data: [],
   selectedPass: null
 };
@@ -22,6 +28,17 @@ export default createReducer(initialState, {
   [PASS_FETCH_REQUEST]: (state, payload) => {
     return Object.assign({}, state, {
       isFetching: true
+    });
+  },
+  [ACCESS_POINT_RECEIVE]: (state, payload) => {
+    return Object.assign({}, state, {
+      accessPoints: payload.data,
+      isFetchingAccessPoints: false
+    });
+  },
+  [ACCESS_POINT_FETCH_REQUEST]: (state, payload) => {
+    return Object.assign({}, state, {
+      isFetchingAccessPoints: true
     });
   },
   [PASS_SEARCH_INPUT_CHANGE]: (state, payload) => {

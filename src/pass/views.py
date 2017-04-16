@@ -1,13 +1,13 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 
 from lib.utils import AtomicMixin
 
-from .models import Pass
-from .serializers import PassSerializer
+from .models import Pass, AccessPoint
+from .serializers import PassSerializer, AccessPointSerializer
 
 
 class PassListView(AtomicMixin, GenericAPIView):
@@ -18,3 +18,8 @@ class PassListView(AtomicMixin, GenericAPIView):
         return Response({
             'pass': self.get_serializer(self.get_queryset(), many=True).data
         })
+
+
+class AccessPointListView(AtomicMixin, ListAPIView):
+    serializer_class = AccessPointSerializer
+    queryset = AccessPoint.objects.all()
