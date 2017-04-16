@@ -24,6 +24,10 @@ class App extends React.Component {
         this.props.dispatch(push('/'));
     };
 
+    goToPass = () => {
+        this.props.dispatch(push('/pass'));
+    };
+
     goToProtected = () => {
         this.props.dispatch(push('/protected'));
     };
@@ -34,6 +38,9 @@ class App extends React.Component {
         });
         const protectedClass = classNames({
             active: this.props.pathName === '/protected'
+        });
+        const passClass = classNames({
+            active: this.props.pathName === '/pass'
         });
         const loginClass = classNames({
             active: this.props.pathName === '/login'
@@ -56,31 +63,40 @@ class App extends React.Component {
                                 <span className="icon-bar" />
                             </button>
                             <a className="navbar-brand" tabIndex="0" onClick={this.goToIndex}>
-                                Django React Redux Demo
+                                PassChecker
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="top-navbar">
                             {this.props.isAuthenticated ?
-                                <ul className="nav navbar-nav navbar-right">
-                                    <li className={homeClass}>
-                                        <a className="js-go-to-index-button" tabIndex="0" onClick={this.goToIndex}>
-                                            <i className="fa fa-home" /> Home
-                                        </a>
-                                    </li>
-                                    <li className={protectedClass}>
-                                        <a className="js-go-to-protected-button"
-                                           tabIndex="0"
-                                           onClick={this.goToProtected}
-                                        >
-                                            <i className="fa fa-lock" /> Protected
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a className="js-logout-button" tabIndex="0" onClick={this.logout}>
-                                            Logout
-                                        </a>
-                                    </li>
-                                </ul>
+                                <div>
+                                    <ul className="nav navbar-nav navbar-left">
+                                        <li className={passClass}>
+                                            <a className="js-go-to-pass-button" tabIndex="0" onClick={this.goToPass}>
+                                                <i className="fa fa-search" /> Recherche
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul className="nav navbar-nav navbar-right">
+                                        <li className={homeClass}>
+                                            <a className="js-go-to-index-button" tabIndex="0" onClick={this.goToIndex}>
+                                                <i className="fa fa-home" /> Home
+                                            </a>
+                                        </li>
+                                        <li className={protectedClass}>
+                                            <a className="js-go-to-protected-button"
+                                               tabIndex="0"
+                                               onClick={this.goToProtected}
+                                            >
+                                                <i className="fa fa-lock" /> Protected
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a className="js-logout-button" tabIndex="0" onClick={this.logout}>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                                 :
                                 <ul className="nav navbar-nav navbar-right">
                                     <li className={homeClass}>

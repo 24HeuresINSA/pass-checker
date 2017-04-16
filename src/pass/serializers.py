@@ -35,4 +35,4 @@ class PassSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Pass
-        fields = ('vehicle', 'allowed_drivers', 'allowed_access_points', 'allowed_time_slots',)
+        fields = ('id', 'vehicle', 'allowed_drivers', 'allowed_access_points', 'allowed_time_slots',)
