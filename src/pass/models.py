@@ -44,3 +44,29 @@ class Pass(models.Model):
 
     def __str__(self):
         return self.vehicle.numberplate
+
+
+class Access(models.Model):
+    PASSING_ACCESS = 1
+    FORCE_ACCESS = 2
+    ACCESS_TYPES = (
+        (PASSING_ACCESS, _("Passage")),
+        (FORCE_ACCESS, _("Forçage"))
+    )
+    ACTION_SENTENCES = (
+        (PASSING_ACCESS, _("est autorisé à passer")),
+        (FORCE_ACCESS, _("a forcé le point d'accès"))
+    )
+
+    type = models.SmallIntegerField(verbose_name=_("Access type"), choices=ACCESS_TYPES)
+    numberplate = models.CharField(verbose_name=_("Numberplate"), max_length=256)
+    access_point = models.CharField(verbose_name=_("Access point"), max_length=256)
+    comment = models.TextField(verbose_name=_("Comment"), null=True, blank=True)
+
+    created_at = models.DateTimeField(verbose_name=_("Created at"), auto_now_add=True)
+
+    class Meta(object):
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.numberplate + " on " + str(self.created_at)

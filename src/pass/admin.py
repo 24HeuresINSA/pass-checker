@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AccessPoint, TimeSlot, Driver, Vehicle, Pass
+from .models import AccessPoint, TimeSlot, Driver, Vehicle, Pass, Access
 
 
 # Register your models here.
@@ -57,3 +57,4 @@ admin.site.register(TimeSlot)
 admin.site.register(Driver)
 admin.site.register(Vehicle)
 admin.site.register(Pass, PassAdmin)
+admin.site.register(Access)

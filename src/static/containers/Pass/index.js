@@ -8,6 +8,7 @@ class PassView extends React.Component {
 
   static defaultProps = {
     data: [],
+    filteredPass: [],
     accessPoints: [],
     searchText: '',
     isFetching: false,
@@ -32,6 +33,7 @@ class PassView extends React.Component {
     }
   };
 
+
   // Note: have to use componentWillMount, if I add this in constructor will get error:
   // Warning: setState(...): Cannot update during an existing state transition (such as within `render`).
   // Render methods should be a pure function of props and state.
@@ -39,6 +41,24 @@ class PassView extends React.Component {
     const token = this.props.token;
     this.props.actions.passFetch(token);
     this.props.actions.accessPointFetch(token);
+    this.props.actions.accessFetch(token);
+  }
+
+  createForcedAccess(accessPointName) {
+    const token = this.props.token;
+    const numberplate = this.props.selectedPass.vehicle.numberplate;
+    this.props.actions.accessCreate(token, 2, accessPointName, numberplate);
+  }
+
+  createAllowedAccess(accessPointName) {
+    const token = this.props.token;
+    const numberplate = this.props.selectedPass.vehicle.numberplate;
+    this.props.actions.accessCreate(token, 1, accessPointName, numberplate);
+  }
+
+  updateComment(comment) {
+    const { token, createdAccess } = this.props;
+    this.props.actions.accessCommentUpdate(token, createdAccess, comment);
   }
 
   isAccessPointAllowed(accessPoint, allowedAccessPoints) {
@@ -51,20 +71,18 @@ class PassView extends React.Component {
     return allowed;
   }
 
-  accessPointClassName(accessPoint, allowedAccessPoints) {
-    return this.isAccessPointAllowed(accessPoint, allowedAccessPoints) ? 'success' : 'danger';
-  }
-
   render() {
+    let textareaComment;
+
     return (
       <div className="protected">
         <div className="container">
           <div className="row">
             <div className="col-md-4">
-              <h3>Zone de recherche</h3>
+              <h3>Rechercher un véhicule</h3>
               <Autocomplete
                 value={this.props.searchText}
-                items={this.props.data}
+                items={this.props.filteredPass}
                 getItemValue={(item) => item.vehicle.numberplate}
                 renderItem={(item, isHighlighted) => (
                   <div
@@ -76,7 +94,11 @@ class PassView extends React.Component {
                 onSelect={(value, item) => this.props.actions.passSearchInputSelect(item)}
                 wrapperProps={{className: "form-group"}}
                 wrapperStyle={{}}
-                inputProps={{className: "form-control", placeholder: "Rechercher..."}}
+                inputProps={{
+                  className: "form-control",
+                  placeholder: "Rechercher...",
+                  autoFocus: true
+                }}
               />
               <div className="alert alert-info">
                 <b>Aide - Recherches possibles</b><br/>
@@ -88,14 +110,22 @@ class PassView extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
-              <h3>Résultats</h3>
+              <h3>Fiche véhicule</h3>
               <div className="panel panel-default">
                 <div className="panel-body">
                   {this.props.selectedPass !== null ?
                     <div>
                       <div className="row">
-                        <div className="col-sm-12">
+                        <div className="col-sm-10">
                           <p className="lead">{this.props.selectedPass.vehicle.numberplate}</p>
+                        </div>
+                        <div className="col-sm-2">
+                          <p className="text-right">
+                            <a
+                              className="btn btn-sm btn-default"
+                              onClick={this.props.actions.passClose}
+                            ><i className="fa fa-times"/>Fermer</a>
+                          </p>
                         </div>
                       </div>
                       <div className="row">
@@ -124,54 +154,112 @@ class PassView extends React.Component {
                           <h5>Points d'accès</h5>
                           <table className="table table-striped table-bordered table-hover">
                             <thead>
-                              <tr>
-                                {this.props.accessPoints.map(item =>
-                                  <th
-                                    key={item.id}
-                                    className="text-center"
-                                  >
-                                    <i
-                                      className={this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points)
-                                        ? 'fa fa-check'
-                                        : 'fa fa-times'
-                                      }
-                                    />
-                                    {item.name}
-                                  </th>
-                                )}
-                              </tr>
+                            <tr>
+                              {this.props.accessPoints.map(item =>
+                                <th
+                                  key={item.id}
+                                  className="text-center"
+                                >
+                                  <i
+                                    className={this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points)
+                                      ? 'fa fa-check'
+                                      : 'fa fa-times'
+                                    }
+                                  />
+                                  {item.name}
+                                </th>
+                              )}
+                            </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                {this.props.accessPoints.map(item =>
-                                  <td key={item.id} className="text-center">
-                                      {this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points) ?
-                                        <button className="btn btn-sm btn-success">Passage</button>
-                                        :
-                                        <div className="btn-group">
-                                          <button type="button" className="btn btn-sm btn-danger">Forçage</button>
-                                          <button type="button" className="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span className="caret"/>
-                                            <span className="sr-only">Toggle Dropdown</span>
-                                          </button>
-                                          <ul className="dropdown-menu">
-                                            <li><a href="#">Autoriser le passage</a></li>
-                                          </ul>
-                                        </div>
-                                      }
-                                  </td>
-                                )}
-                              </tr>
+                            <tr>
+                              {this.props.accessPoints.map(item =>
+                                <td key={item.id} className="text-center">
+                                  {this.isAccessPointAllowed(item, this.props.selectedPass.allowed_access_points) ?
+                                    <button
+                                      className="btn btn-sm btn-success"
+                                      onClick={() => this.createAllowedAccess(item.name)}
+                                    >Passage</button>
+                                    :
+                                    <div className="btn-group">
+                                      <button
+                                        type="button"
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => this.createForcedAccess(item.name)}
+                                      >Forçage</button>
+                                      <button type="button" className="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span className="caret"/>
+                                        <span className="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <ul className="dropdown-menu">
+                                        <li>
+                                          <a
+                                            href="#"
+                                            onClick={() => this.createAllowedAccess(item.name)}
+                                          >Autoriser le passage</a>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  }
+                                </td>
+                              )}
+                            </tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
                     </div>
-                  :
-                    <p className="text-center">Aucun résultat</p>
+                    :
+                    <p className="text-center">Aucun véhicule sélectionné.</p>
+                  }
+                  {this.props.createdAccess ?
+                    <div className="alert alert-success">
+                      Le passage vient d'être consigné dans la main courante.<br/>
+                      <b>Commentaire :</b><br/>
+                      <textarea
+                        className="form-control"
+                        rows="3"
+                        ref={node => textareaComment = node}
+                      />
+                      <button
+                        className="btn btn-default"
+                        onClick={() => this.updateComment(textareaComment.value)}
+                      >Enregistrer</button>
+                      {this.props.isCommentUpdated
+                        ? <span>&nbsp;Commentaire enregistré</span>
+                        : <span/>}
+                    </div> :
+                    <div/>
                   }
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-sm-12">
+              <h3>Derniers accès enregistrés</h3>
+              <table className="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Véhicule</th>
+                    <th>Point d'accès</th>
+                    <th>Action</th>
+                    <th>Commentaire</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {this.props.accesses.map(item =>
+                  <tr key={item.id}>
+                    <td>{item.created_at}</td>
+                    <td>{item.numberplate}</td>
+                    <td>{item.access_point}</td>
+                    <td>{item.type == 1 ? 'Passage autorisé' : 'Forçage'}</td>
+                    <td>{item.comment}</td>
+                  </tr>
+                )}
+                </tbody>
+              </table>
             </div>
           </div>
           {this.props.isFetching === true ?
@@ -190,10 +278,14 @@ const mapStateToProps = (state) => {
   return {
     searchText: state.pass.searchText,
     data: state.pass.data,
+    filteredPass: state.pass.filteredPass,
     accessPoints: state.pass.accessPoints,
     isFetching: state.pass.isFetching,
     isFetchingAccessPoints: state.pass.isFetchingAccessPoints,
-    selectedPass: state.pass.selectedPass
+    selectedPass: state.pass.selectedPass,
+    accesses: state.pass.accesses,
+    createdAccess: state.pass.createdAccess,
+    isCommentUpdated: state.pass.isCommentUpdated
   };
 };
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Vehicle, Pass, Driver, AccessPoint, TimeSlot
+from .models import Vehicle, Pass, Driver, AccessPoint, TimeSlot, Access
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -36,3 +36,17 @@ class PassSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Pass
         fields = ('id', 'vehicle', 'allowed_drivers', 'allowed_access_points', 'allowed_time_slots',)
+
+
+class AccessSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Access
+        fields = ('id', 'type', 'numberplate', 'access_point', 'comment', 'created_at',)
+        read_only_fields = ('id', 'created_at',)
+
+
+class AccessCommentSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Access
+        fields = ('id', 'comment',)
+        read_only_fields = ('id',)
