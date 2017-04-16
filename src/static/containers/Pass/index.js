@@ -42,50 +42,83 @@ class PassView extends React.Component {
     return (
       <div className="protected">
         <div className="container">
-          <h1 className="margin-bottom-medium">Recherche d'un pass</h1>
-          <Autocomplete
-            value={this.props.searchText}
-            items={this.props.data}
-            getItemValue={(item) => item.vehicle.numberplate}
-            renderItem={(item, isHighlighted) => (
-              <div
-                style={isHighlighted ? this.styles.highlightedItem : this.styles.item}
-                key={item.id}
-              >{item.vehicle.numberplate}</div>
-            )}
-            onChange={(event, value) => this.props.actions.passSearchInputChange(value)}
-            onSelect={(value, item) => this.props.actions.passSearchInputSelect(item)}
-          />
+          <div className="row">
+            <div className="col-md-4">
+              <h3>Zone de recherche</h3>
+              <Autocomplete
+                value={this.props.searchText}
+                items={this.props.data}
+                getItemValue={(item) => item.vehicle.numberplate}
+                renderItem={(item, isHighlighted) => (
+                  <div
+                    style={isHighlighted ? this.styles.highlightedItem : this.styles.item}
+                    key={item.id}
+                  >{item.vehicle.numberplate}</div>
+                )}
+                onChange={(event, value) => this.props.actions.passSearchInputChange(value)}
+                onSelect={(value, item) => this.props.actions.passSearchInputSelect(item)}
+                wrapperProps={{className: "form-group"}}
+                wrapperStyle={{}}
+                inputProps={{className: "form-control", placeholder: "Rechercher..."}}
+              />
+              <div className="alert alert-info">
+                <b>Aide - Recherches possibles</b><br/>
+                <ul>
+                  <li>ED-098-NG</li>
+                  <li>ed098ng</li>
+                  <li>ed 098 NG</li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-md-8">
+              <h3>Résultats</h3>
+              <div className="panel panel-default">
+                <div className="panel-body">
+                  {this.props.selectedPass !== null ?
+                    <div>
+                      <div className="row">
+                        <div className="col-sm-12">
+                          <p className="lead">{this.props.selectedPass.vehicle.numberplate}</p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <h5>Conducteurs autorisés</h5>
+                          <ul>
+                            {this.props.selectedPass.allowed_drivers.map((driver, index) =>
+                              <li key={index}>
+                                {driver.first_name} {driver.last_name}<br/>
+                                <mark>{driver.entity_name}</mark>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                        <div className="col-md-6">
+                          <h5>Plages horaires d'admission</h5>
+                          <ul>
+                            {this.props.selectedPass.allowed_time_slots.map((time_slot, index) =>
+                              <li key={index}>{time_slot.name}</li>
+                            )}
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-sm-12">
+                          <h5>Points d'accès</h5>
+                        </div>
+                      </div>
+                    </div>
+                  :
+                    <p className="text-center">Aucun résultat</p>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
           {this.props.isFetching === true ?
             <p className="text-center">Chargement des données...</p>
             :
             <div>
-              <p>Données reçues du serveur</p>
-              <div className="margin-top-small">
-                <div className="alert alert-info">
-                </div>
-              </div>
-              <div className="margin-top-medium">
-                <h5 className="margin-bottom-small"><b>How does this work?</b></h5>
-                <p className="margin-bottom-small">
-                  On the <code>componentWillMount</code> method of the
-                  &nbsp;<code>ProtectedView</code> component, the action
-                  &nbsp;<code>dataFetchProtectedData</code> is called. This action will first
-                  dispatch a <code>DATA_FETCH_PROTECTED_DATA_REQUEST</code> action to the Redux
-                  store. When an action is dispatched to the store, an appropriate reducer for
-                  that specific action will change the state of the store. After that it will then
-                  make an asynchronous request to the server using
-                  the <code>isomorphic-fetch</code> library. On its
-                  response, it will dispatch the <code>DATA_RECEIVE_PROTECTED_DATA</code> action
-                  to the Redux store. In case of wrong credentials in the request, the&nbsp;
-                  <code>AUTH_LOGIN_USER_FAILURE</code> action will be dispatched.
-                </p>
-                <p>
-                  Because the <code>ProtectedView</code> is connected to the Redux store, when the
-                  value of a property connected to the view is changed, the view is re-rendered
-                  with the new data.
-                </p>
-              </div>
             </div>
           }
         </div>
@@ -98,7 +131,8 @@ const mapStateToProps = (state) => {
   return {
     searchText: state.pass.searchText,
     data: state.pass.data,
-    isFetching: state.data.isFetching
+    isFetching: state.pass.isFetching,
+    selectedPass: state.pass.selectedPass
   };
 };
 

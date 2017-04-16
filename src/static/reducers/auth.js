@@ -28,7 +28,7 @@ export default createReducer(initialState, {
             isAuthenticated: true,
             token: payload.token,
             userName: payload.user.email,
-            statusText: 'You have been successfully logged in.'
+            statusText: 'Vous vous êtes connecté avec succès.'
         });
     },
     [AUTH_LOGIN_USER_FAILURE]: (state, payload) => {
@@ -37,7 +37,7 @@ export default createReducer(initialState, {
             isAuthenticated: false,
             token: null,
             userName: null,
-            statusText: `Authentication Error: ${payload.status} - ${payload.statusText}`
+            statusText: `Erreur lors de l'authentification : ${payload.status} - ${payload.statusText}`
         });
     },
     [AUTH_LOGOUT_USER]: (state, payload) => {
@@ -45,7 +45,7 @@ export default createReducer(initialState, {
             isAuthenticated: false,
             token: null,
             userName: null,
-            statusText: 'You have been successfully logged out.'
+            statusText: 'Vous êtes bien déconnecté.'
         });
     }
 });

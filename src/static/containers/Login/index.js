@@ -16,7 +16,6 @@ const Login = t.struct({
 
 const LoginFormOptions = {
     auto: 'placeholders',
-    help: <i>Hint: a@a.com / qw</i>,
     fields: {
         password: {
             type: 'password'
@@ -97,7 +96,7 @@ class LoginView extends React.Component {
 
         return (
             <div className="container login">
-                <h1 className="text-center">Login</h1>
+                <h1 className="text-center">Authentification</h1>
                 <div className="login-container margin-top-medium">
                     {statusText}
                     <form onSubmit={this.login}>
@@ -109,9 +108,9 @@ class LoginView extends React.Component {
                         />
                         <button disabled={this.props.isAuthenticating}
                                 type="submit"
-                                className="btn btn-default btn-block"
+                                className="btn btn-primary btn-block"
                         >
-                            Submit
+                            Envoyer
                         </button>
                     </form>
                 </div>
