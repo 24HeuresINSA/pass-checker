@@ -63,6 +63,17 @@ export default createReducer(initialState, {
       item.vehicle.numberplate.toUpperCase().startsWith(searchText)
     );
 
+    // We add non existent vehicle
+    filteredPass.push({
+        fake: true,
+        vehicle: {
+          numberplate: searchText
+        },
+        allowed_drivers: [],
+        allowed_access_points: [],
+        allowed_time_slots: []
+    });
+
     return Object.assign({}, state, {
       filteredPass,
       searchText: payload.text
@@ -106,6 +117,6 @@ export default createReducer(initialState, {
     return Object.assign({}, state, {
       createdAccess: payload.data,
       isCommentUpdated: true
-    });
+    })
   }
 });

@@ -88,7 +88,12 @@ class PassView extends React.Component {
                   <div
                     style={isHighlighted ? this.styles.highlightedItem : this.styles.item}
                     key={item.id}
-                  >{item.vehicle.numberplate}</div>
+                  >
+                    {item.fake
+                      ? <div><i className="fa fa-plus"/> Ajouter : {item.vehicle.numberplate}</div>
+                      : <div>{item.vehicle.numberplate}</div>
+                    }
+                  </div>
                 )}
                 onChange={(event, value) => this.props.actions.passSearchInputChange(value)}
                 onSelect={(value, item) => this.props.actions.passSearchInputSelect(item)}
@@ -117,7 +122,10 @@ class PassView extends React.Component {
                     <div>
                       <div className="row">
                         <div className="col-sm-10">
-                          <p className="lead">{this.props.selectedPass.vehicle.numberplate}</p>
+                          {this.props.selectedPass.fake
+                            ? <p className="lead">{this.props.selectedPass.vehicle.numberplate} (Véhicule inconnu)</p>
+                            : <p className="lead">{this.props.selectedPass.vehicle.numberplate}</p>
+                          }
                         </div>
                         <div className="col-sm-2">
                           <p className="text-right">
