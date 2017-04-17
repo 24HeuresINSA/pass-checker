@@ -73,6 +73,11 @@ class App extends React.Component {
                         <i className="fa fa-search" /> Recherche
                       </a>
                     </li>
+                    <li>
+                      <a className="js-go-to-admin-button" tabIndex="2" href="/admin/">
+                        <i className="fa fa-cog" /> Admin
+                      </a>
+                    </li>
                   </ul>
                   <ul className="nav navbar-nav navbar-right">
                     <li>
