@@ -147,5 +147,6 @@ switch (TARGET) {
         module.exports = merge(require('./prod.config'), common);
         break;
     default:
-        console.log('Target configuration not found. Valid targets: "dev" or "prod".');
+        module.exports = merge(require('./prod.config'), common);
+        break;
 }

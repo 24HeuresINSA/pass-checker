@@ -1,0 +1,9 @@
+# For production build only
+node_modules
+src/static_dist
+**/*.pyc
+**/*.pyo
+**/__pycache__
+coverage
+.coverage
+.cache

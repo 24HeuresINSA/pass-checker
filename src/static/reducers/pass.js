@@ -77,7 +77,7 @@ export default createReducer(initialState, {
     return Object.assign({}, state, {
       filteredPass,
       searchText: payload.text
-    })
+    });
   },
   [PASS_SEARCH_INPUT_SELECT]: (state, payload) => {
     return Object.assign({}, state, {
