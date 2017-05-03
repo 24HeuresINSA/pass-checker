@@ -115,7 +115,14 @@ class PassView extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
-              <h3>Fiche véhicule</h3>
+              <h3>Fiche véhicule
+                  {this.props.selectedPass !== null && this.props.selectedPass.pass_id
+                      ?
+                      <span>&nbsp;- PASS #{this.props.selectedPass.pass_id}</span>
+                      :
+                      <span/>
+                  }
+              </h3>
               <div className="panel panel-default">
                 <div className="panel-body">
                   {this.props.selectedPass !== null ?

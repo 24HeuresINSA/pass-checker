@@ -28,6 +28,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 
 
 class PassSerializer(serializers.ModelSerializer):
+    pass_id = serializers.SerializerMethodField()
     vehicle = VehicleSerializer()
     allowed_drivers = DriverSerializer(many=True)
     allowed_access_points = AccessPointSerializer(many=True)
@@ -35,7 +36,11 @@ class PassSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Pass
-        fields = ('id', 'comment', 'vehicle', 'allowed_drivers', 'allowed_access_points', 'allowed_time_slots',)
+        fields = ('id', 'pass_id', 'comment', 'vehicle', 'allowed_drivers', 'allowed_access_points',
+                  'allowed_time_slots')
+
+    def get_pass_id(self, obj):
+        return '17' + str(obj.id).zfill(3)
 
 
 class AccessSerializer(serializers.ModelSerializer):
