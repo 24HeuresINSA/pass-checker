@@ -216,6 +216,19 @@ class PassView extends React.Component {
                           </table>
                         </div>
                       </div>
+                      {this.props.selectedPass.comment
+                          ?
+                          <div className="row">
+                            <div className="col-sm-12">
+                              <h5>Commentaire</h5>
+                                {this.props.selectedPass.comment.split('\n').map((item, key) => {
+                                  return <span key={key}>{item}<br/></span>
+                                })}
+                            </div>
+                          </div>
+                          :
+                          <div></div>
+                      }
                     </div>
                     :
                     <p className="text-center">Aucun véhicule sélectionné.</p>

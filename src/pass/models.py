@@ -36,6 +36,7 @@ class Vehicle(models.Model):
 
 
 class Pass(models.Model):
+    comment = models.TextField(verbose_name="Comment", null=True, blank=True)
     vehicle = models.ForeignKey(Vehicle, verbose_name=_("Vehicle"), related_name="passes", on_delete=models.CASCADE)
     allowed_drivers = models.ManyToManyField(Driver, verbose_name=_("Allowed drivers"), related_name="passes")
     allowed_access_points = models.ManyToManyField(AccessPoint, verbose_name=_("Allowed access points"),
