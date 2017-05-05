@@ -61,6 +61,11 @@ class PassView extends React.Component {
     this.props.actions.accessCommentUpdate(token, createdAccess, comment);
   }
 
+  deleteAccess(access) {
+    const token = this.props.token;
+    this.props.actions.accessDelete(token, access);
+  }
+
   isAccessPointAllowed(accessPoint, allowedAccessPoints) {
     let allowed = false;
     for (let i = 0; i < allowedAccessPoints.length; i++) {
@@ -274,6 +279,7 @@ class PassView extends React.Component {
                     <th>Point d'accès</th>
                     <th>Action</th>
                     <th>Commentaire</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,6 +290,7 @@ class PassView extends React.Component {
                     <td>{item.access_point}</td>
                     <td>{item.type == 1 ? 'Passage autorisé' : 'Forçage'}</td>
                     <td>{item.comment}</td>
+                    <td><a className="btn btn-default btn-sm" onClick={() => this.deleteAccess(item)}><i className="fa fa-trash"/> Supprimer</a></td>
                   </tr>
                 )}
                 </tbody>

@@ -16,5 +16,8 @@ export function checkHttpStatus(response) {
 }
 
 export function parseJSON(response) {
-    return response.json();
+    if (response.status != 204)
+        return response.json();
+    else
+        return response
 }
