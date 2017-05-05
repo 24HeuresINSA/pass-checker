@@ -25,6 +25,7 @@ COPY ./docker/prod/nginx-default /etc/nginx/sites-enabled/default
 
 RUN yarn
 RUN npm run prod
+RUN python src/manage.py collectstatic --no-input --clear
 
 EXPOSE 80
 CMD ["/django-entrypoint.sh"]

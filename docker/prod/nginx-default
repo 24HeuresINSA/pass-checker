@@ -5,7 +5,7 @@ server {
     client_max_body_size 20M;
 
     location /static/ {
-        alias /django/src/static_dist/;
+        alias /django/src/static_root/;
         add_header Cache-Control no-cache;
         autoindex off;
         expires 1s;
