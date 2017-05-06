@@ -85,5 +85,25 @@
     "begins_at": "2017-05-21T05:00:00Z",
     "ends_at": "2017-05-21T23:59:59Z"
   }
+},
+{
+  "model": "accounts.user",
+  "pk": "5a0d79be-5f8a-4feb-b4ac-e7e3b4426873",
+  "fields": {
+    "password": "pbkdf2_sha256$36000$8v0fu4nhsrRR$lWD7oOtH+Kj9nFaOWp/GyRFLy6wKSbt4BMR33Yt40as=",
+    "last_login": "2017-04-12T18:45:19.055Z",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "username": "",
+    "email": "admin@example.com",
+    "gender": "M",
+    "confirmed_email": false,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-04-11T21:58:26.570Z",
+    "date_updated": "2017-04-11T21:58:26.570Z",
+    "activation_key": "9b64dfce-a7b1-4a6f-91dd-776908128cbd"
+  }
 }
 ]
