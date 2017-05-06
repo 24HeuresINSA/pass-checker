@@ -49,7 +49,14 @@ class Pass(models.Model):
     def get_drivers(self):
         drivers = []
         for d in self.allowed_drivers.all():
-            drivers.append(d.first_name + ' ' + d.last_name + ' (' + d.entity_name + ')')
+            driver = ''
+            if d.first_name is not None:
+                driver = d.first_name
+            if d.last_name is not None:
+                driver = driver + ' ' + d.last_name
+            if d.entity_name is not None:
+                driver = driver + ' (' + d.entity_name + ')'
+            drivers.append(driver)
         return drivers
 
 
