@@ -46,6 +46,12 @@ class Pass(models.Model):
     def __str__(self):
         return self.vehicle.numberplate
 
+    def get_drivers(self):
+        drivers = []
+        for d in self.allowed_drivers.all():
+            drivers.append(d.first_name + ' ' + d.last_name + ' (' + d.entity_name + ')')
+        return drivers
+
 
 class Access(models.Model):
     PASSING_ACCESS = 1
